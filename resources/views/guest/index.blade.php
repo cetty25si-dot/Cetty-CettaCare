@@ -1,0 +1,548 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CettaCare - Sistem Informasi Pengaduan Mahasiswa</title>
+    <meta name="description" content="CettaCare adalah sistem informasi pengaduan mahasiswa untuk menyampaikan dan memantau pengaduan terkait lingkungan kampus.">
+
+    <link rel="stylesheet" href="{{ asset('guest/assets/bootstrap/css/bootstrap.min.css') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --navy: #17345c;
+            --blue: #245b91;
+            --teal: #21a6a1;
+            --light: #f4f8fc;
+            --text: #536276;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+            background: #ffffff;
+            line-height: 1.7;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .navbar {
+            background: #ffffff;
+            padding: 16px 0;
+            box-shadow: 0 3px 20px rgba(23, 52, 92, 0.07);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--navy);
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .brand:hover {
+            color: var(--teal);
+        }
+
+        .brand-icon {
+            width: 43px;
+            height: 43px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background: var(--teal);
+            border-radius: 13px;
+            font-size: 22px;
+        }
+
+        .nav-link {
+            color: var(--navy);
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0 8px;
+        }
+
+        .nav-link:hover {
+            color: var(--teal);
+        }
+
+        .btn-main {
+            display: inline-block;
+            background: var(--teal);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            border: 2px solid var(--teal);
+            transition: 0.2s;
+        }
+
+        .btn-main:hover {
+            background: #188b87;
+            border-color: #188b87;
+            color: #fff;
+        }
+
+        .btn-outline {
+            display: inline-block;
+            color: var(--navy);
+            padding: 11px 24px;
+            border: 2px solid #dce5ef;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .hero {
+            background: linear-gradient(120deg, #f0f8ff, #e9f7f6);
+            padding: 95px 0 85px;
+            overflow: hidden;
+        }
+
+        .hero-label {
+            display: inline-block;
+            color: #168d88;
+            background: #d9f4f1;
+            border-radius: 30px;
+            padding: 7px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 {
+            font-size: clamp(34px, 4.5vw, 53px);
+            font-weight: 800;
+            line-height: 1.25;
+            color: var(--navy);
+            margin-bottom: 22px;
+        }
+
+        .hero h1 span {
+            color: var(--teal);
+        }
+
+        .hero p {
+            font-size: 15px;
+            max-width: 520px;
+            margin-bottom: 30px;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 470px;
+            display: block;
+            margin: auto;
+            border-radius: 24px;
+        }
+
+        .hero-card {
+            background: white;
+            border-radius: 14px;
+            padding: 18px;
+            margin-top: 20px;
+            box-shadow: 0 10px 35px rgba(23, 52, 92, 0.08);
+        }
+
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            color: var(--navy);
+            font-weight: 800;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .section-desc {
+            max-width: 650px;
+            margin: 0 auto 45px;
+        }
+
+        .feature-card {
+            height: 100%;
+            padding: 30px 24px;
+            background: #fff;
+            border: 1px solid #e8eef5;
+            border-radius: 16px;
+            transition: 0.25s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(23, 52, 92, 0.09);
+        }
+
+        .feature-icon {
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e3f7f5;
+            color: var(--teal);
+            border-radius: 15px;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h5 {
+            color: var(--navy);
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .steps-section {
+            background: var(--light);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--teal);
+            color: white;
+            font-size: 19px;
+            font-weight: 700;
+            margin: 0 auto 18px;
+        }
+
+        .step-card {
+            text-align: center;
+            padding: 25px 20px;
+        }
+
+        .step-card h5 {
+            color: var(--navy);
+            font-weight: 700;
+        }
+
+        .cta {
+            background: var(--navy);
+            color: #fff;
+            padding: 65px 20px;
+            border-radius: 22px;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .cta p {
+            color: #d8e3f1;
+            max-width: 620px;
+            margin: 0 auto 25px;
+        }
+
+        footer {
+            background: #102744;
+            color: #d8e3f1;
+            padding: 35px 0;
+        }
+
+        footer .brand {
+            color: white;
+        }
+
+        footer p {
+            margin: 10px 0 0;
+            font-size: 13px;
+        }
+
+        @media (max-width: 767px) {
+            .hero {
+                padding: 65px 0;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero-image {
+                margin-top: 35px;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .section-title {
+                font-size: 27px;
+            }
+
+            .navbar .btn-main {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <img
+    src="{{ asset('guest/assets/img/logoCettaCare.png') }}"
+    alt="Logo CettaCare"
+    style="width: 45px; height: 45px; object-fit: contain;"
+>
+
+            <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarGuest"
+                aria-controls="navbarGuest" aria-expanded="false"
+                aria-label="Buka navigasi">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarGuest">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#beranda">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tentang">Tentang</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#fitur">Fitur</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#cara-pengaduan">Cara Pengaduan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#kategori">Kategori</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pengaduan-terbaru">Pengaduan</a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn-main" href="#login">Login Mahasiswa</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="beranda">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <span class="hero-label">
+                        Sistem Informasi Pengaduan Mahasiswa
+                    </span>
+
+                    <h1>
+                        Sampaikan Pengaduan
+                        <span>dengan Mudah</span>
+                    </h1>
+
+                    <p>
+                        CettaCare membantu mahasiswa menyampaikan pengaduan
+                        terkait fasilitas, akademik, dan pelayanan kampus
+                        secara mudah, terstruktur, dan transparan.
+                    </p>
+
+                    <a href="#login" class="btn-main me-2 mb-2">
+                        Buat Pengaduan &rarr;
+                    </a>
+
+                    <a href="#cara-pengaduan" class="btn-outline mb-2">
+                        Pelajari Caranya
+                    </a>
+
+                    <div class="hero-card">
+                        <strong style="color: var(--navy);">
+                            Pengaduan lebih terarah
+                        </strong>
+                        <p class="mb-0 mt-1" style="font-size: 13px;">
+                            Sampaikan masalah dan pantau perkembangan
+                            pengaduan melalui satu sistem.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <img
+                        src="{{ asset('guest/assets/img/home-img2.png') }}"
+                        class="hero-image"
+                        alt="Ilustrasi layanan CettaCare"
+                        onerror="this.style.display='none';"
+                    >
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TENTANG -->
+    <section class="section" id="tentang">
+        <div class="container text-center">
+            <h2 class="section-title">Tentang CettaCare</h2>
+
+            <p class="section-desc">
+                CettaCare merupakan sistem informasi pengaduan mahasiswa
+                yang dirancang untuk mempermudah penyampaian keluhan
+                dan membantu pihak kampus mengelola pengaduan secara
+                lebih terstruktur.
+            </p>
+
+            <div class="row g-4 text-start">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">&#9993;</div>
+                        <h5>Pengaduan Mudah</h5>
+                        <p class="mb-0">
+                            Mahasiswa dapat menyampaikan keluhan melalui
+                            sistem dengan informasi yang jelas.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">&#128203;</div>
+                        <h5>Proses Terstruktur</h5>
+                        <p class="mb-0">
+                            Pengaduan dikelola berdasarkan kategori agar
+                            mudah ditinjau dan ditindaklanjuti.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">&#128270;</div>
+                        <h5>Status Transparan</h5>
+                        <p class="mb-0">
+                            Mahasiswa dapat memantau perkembangan
+                            pengaduan sesuai status yang tersedia.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CARA PENGADUAN -->
+    <section class="section steps-section" id="cara-pengaduan">
+        <div class="container text-center">
+            <h2 class="section-title">Bagaimana Cara Mengadu?</h2>
+
+            <p class="section-desc">
+                Ikuti langkah berikut untuk menyampaikan pengaduan
+                melalui CettaCare.
+            </p>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h5>Login Mahasiswa</h5>
+                        <p>
+                            Masuk ke akun mahasiswa untuk menggunakan
+                            layanan pengaduan.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h5>Kirim Pengaduan</h5>
+                        <p>
+                            Isi judul, kategori, lokasi, dan deskripsi
+                            masalah dengan jelas.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h5>Pantau Status</h5>
+                        <p>
+                            Periksa status pengaduan dan tanggapan
+                            dari pihak pengelola.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DATA KATEGORI DARI DATABASE -->
+    @include('guest.partials.kategori')
+
+    <!-- DATA PENGADUAN DARI DATABASE -->
+    @include('guest.partials.pengaduan')
+
+    <!-- DATA TANGGAPAN DARI DATABASE -->
+    @include('guest.partials.tanggapan')
+
+    <!-- CTA / LOGIN -->
+    <section class="section" id="login">
+        <div class="container">
+            <div class="cta">
+                <h2>Ada Masalah di Lingkungan Kampus?</h2>
+
+                <p>
+                    Sampaikan pengaduanmu melalui CettaCare agar dapat
+                    dikelola dan ditindaklanjuti secara lebih terarah.
+                </p>
+
+                <a href="#" class="btn-main"
+                    onclick="alert('Fitur login mahasiswa belum diaktifkan.'); return false;">
+                    Login untuk Mengadu
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <a class="brand" href="#beranda">
+                        <span class="brand-icon">C</span>
+                        CettaCare
+                    </a>
+
+                    <p>
+                        Sistem Informasi Pengaduan Mahasiswa
+                    </p>
+                </div>
+
+                <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                    <p>
+                        &copy; 2026 CettaCare. Seluruh hak cipta dilindungi.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ asset('guest/assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+</body>
+</html>
+```

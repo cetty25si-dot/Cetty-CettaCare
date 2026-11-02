@@ -1,24 +1,21 @@
 <?php
-use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\GuestController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\PengaduanController;
+use App\Http\Controllers\TanggapanController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
-// Halaman utama
-Route::get('/', function () {
-    return view('admin.dashboard');
-});
+Route::get('/', [GuestController::class, 'index'])->name('guest.index');
 
-// Dashboard Admin
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->name('admin.dashboard');
 
-// CRUD Kategori
 Route::resource('kategori', KategoriController::class);
-
-// CRUD Mahasiswa
 Route::resource('mahasiswa', MahasiswaController::class);
-
-// CRUD Pengaduan
-Route::resource('pengaduan', PengaduanController::class);
+Route::resource('pengaduan', PengaduanController::class)->except(['show']);
+Route::resource('tanggapan', TanggapanController::class)->except(['show']);
+Route::resource('user', UserController::class);

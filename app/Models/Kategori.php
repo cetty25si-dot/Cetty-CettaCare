@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Kategori extends Model
 {
@@ -12,4 +13,9 @@ class Kategori extends Model
         'nama_kategori',
         'deskripsi',
     ];
+
+    public function pengaduan(): HasMany
+    {
+        return $this->hasMany(Pengaduan::class, 'kategori_id');
+    }
 }

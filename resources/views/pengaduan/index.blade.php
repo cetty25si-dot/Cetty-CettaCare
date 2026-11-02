@@ -56,8 +56,10 @@
                     <tr>
                         <th>No.</th>
                         <th>Judul</th>
+                        <th>Mahasiswa</th>
                         <th>Kategori</th>
                         <th>Lokasi</th>
+                        <th>Tanggapan</th>
                         <th>Deskripsi</th>
                         <th>Status</th>
                         <th style="min-width: 160px;">Aksi</th>
@@ -69,8 +71,10 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->judul }}</td>
-                            <td>{{ $item->kategori }}</td>
+                            <td>{{ $item->mahasiswa?->nama ?? 'Belum dikaitkan' }}</td>
+                            <td>{{ $item->kategoriData?->nama_kategori ?? $item->kategori }}</td>
                             <td>{{ $item->lokasi }}</td>
+                            <td>{{ $item->tanggapan->count() }}</td>
                             <td>{{ $item->deskripsi }}</td>
                             <td>{{ $item->status }}</td>
                             <td>
@@ -95,7 +99,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center py-4">
+                            <td colspan="9" class="text-center py-4">
                                 Belum ada data pengaduan.
                             </td>
                         </tr>
