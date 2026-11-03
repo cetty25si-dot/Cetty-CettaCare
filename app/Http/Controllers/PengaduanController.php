@@ -2,100 +2,84 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kategori;
+use App\Models\Mahasiswa;
 use App\Models\Pengaduan;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Database\QueryException;
+use Illuminate\View\View;
 
 class PengaduanController extends Controller
 {
-    // Menampilkan daftar pengaduan
-    public function index()
+    public function index(): View
     {
-        $pengaduan = Pengaduan::latest()->get();
+        $pengaduan = Pengaduan::with(['mahasiswa', 'kategoriData', 'tanggapan'])
+            ->latest()
+            ->get();
 
         return view('pengaduan.index', compact('pengaduan'));
     }
 
-    // Menampilkan form tambah pengaduan
-    public function create()
+    public function create(): View
     {
-        return view('pengaduan.create');
+        $kategori = Kategori::orderBy('nama_kategori')->get();
+        $mahasiswa = Mahasiswa::orderBy('nama')->get();
+
+        return view('pengaduan.create', compact('kategori', 'mahasiswa'));
     }
 
-    // Menyimpan pengaduan baru
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'judul' => 'required|string|max:150',
-            'kategori' => 'required|string|max:100',
-            'lokasi' => 'required|string|max:150',
-            'deskripsi' => 'required|string',
-            'status' => 'required|in:Menunggu,Diproses,Selesai',
+            'judul' => ['required', 'string', 'max:150'],
+            'kategori_id' => ['required', 'exists:kategori,id'],
+            'mahasiswa_id' => ['required', 'exists:mahasiswa,id'],
+            'lokasi' => ['required', 'string', 'max:150'],
+            'deskripsi' => ['required', 'string'],
+            'status' => ['required', 'in:Menunggu,Diproses,Selesai,Ditolak'],
         ]);
 
-        try {
-            Pengaduan::create($validated);
+        $kategori = Kategori::findOrFail($validated['kategori_id']);
+        $validated['kategori'] = $kategori->nama_kategori;
 
-            return redirect()->route('pengaduan.index')
-                ->with('success', 'Pengaduan berhasil ditambahkan!');
-        } catch (QueryException $e) {
-            return back()->withInput()
-                ->with('error', 'Pengaduan gagal disimpan.');
-        }
+        Pengaduan::create($validated);
+
+        return redirect()->route('pengaduan.index')
+            ->with('success', 'Pengaduan berhasil ditambahkan!');
     }
 
-    // Menampilkan detail pengaduan
-    public function show(string $id)
+    public function edit(Pengaduan $pengaduan): View
     {
-        $pengaduan = Pengaduan::findOrFail($id);
+        $kategori = Kategori::orderBy('nama_kategori')->get();
+        $mahasiswa = Mahasiswa::orderBy('nama')->get();
 
-        return view('pengaduan.show', compact('pengaduan'));
+        return view('pengaduan.edit', compact('pengaduan', 'kategori', 'mahasiswa'));
     }
 
-    // Menampilkan form edit pengaduan
-    public function edit(string $id)
+    public function update(Request $request, Pengaduan $pengaduan): RedirectResponse
     {
-        $pengaduan = Pengaduan::findOrFail($id);
-
-        return view('pengaduan.edit', compact('pengaduan'));
-    }
-
-    // Memperbarui pengaduan
-    public function update(Request $request, string $id)
-    {
-        $pengaduan = Pengaduan::findOrFail($id);
-
         $validated = $request->validate([
-            'judul' => 'required|string|max:150',
-            'kategori' => 'required|string|max:100',
-            'lokasi' => 'required|string|max:150',
-            'deskripsi' => 'required|string',
-            'status' => 'required|in:Menunggu,Diproses,Selesai',
+            'judul' => ['required', 'string', 'max:150'],
+            'kategori_id' => ['required', 'exists:kategori,id'],
+            'mahasiswa_id' => ['required', 'exists:mahasiswa,id'],
+            'lokasi' => ['required', 'string', 'max:150'],
+            'deskripsi' => ['required', 'string'],
+            'status' => ['required', 'in:Menunggu,Diproses,Selesai,Ditolak'],
         ]);
 
-        try {
-            $pengaduan->update($validated);
+        $kategori = Kategori::findOrFail($validated['kategori_id']);
+        $validated['kategori'] = $kategori->nama_kategori;
+        $pengaduan->update($validated);
 
-            return redirect()->route('pengaduan.index')
-                ->with('success', 'Pengaduan berhasil diperbarui!');
-        } catch (QueryException $e) {
-            return back()->withInput()
-                ->with('error', 'Pengaduan gagal diperbarui.');
-        }
+        return redirect()->route('pengaduan.index')
+            ->with('success', 'Pengaduan berhasil diperbarui!');
     }
 
-    // Menghapus pengaduan
-    public function destroy(string $id)
+    public function destroy(Pengaduan $pengaduan): RedirectResponse
     {
-        $pengaduan = Pengaduan::findOrFail($id);
+        $pengaduan->delete();
 
-        try {
-            $pengaduan->delete();
-
-            return redirect()->route('pengaduan.index')
-                ->with('success', 'Pengaduan berhasil dihapus!');
-        } catch (QueryException $e) {
-            return back()->with('error', 'Pengaduan gagal dihapus.');
-        }
+        return redirect()->route('pengaduan.index')
+            ->with('success', 'Pengaduan berhasil dihapus!');
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+HEAD;
+use App\Http\Controllers\GuestController;
 use App\Http\Controllers\KategoriController;
-use App\Http\Controllers\MahasiswaController;
-use App\Http\Controllers\PengaduanController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\MahasiswaController;
 
 // Halaman Guest
 Route::get('/', function () {
@@ -25,9 +26,19 @@ Route::post('/auth', [LoginController::class, 'login'])
 Route::post('/logout', [LoginController::class, 'logout'])
     ->name('logout');
 
-// Dashboard Admin
+use App\Http\Controllers\PengaduanController;
+use App\Http\Controllers\PengaduanController;
+use App\Http\Controllers\TanggapanController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', [GuestController::class, 'index'])->name('guest.index');
+9d3f9160fbd1e1cda3697cb806586094255ef1cc;
+
 Route::get('/admin/dashboard', function () {
-    if (!session('admin_logged_in')) {
+    if (! session('admin_logged_in')) {
         return redirect()->route('login')
             ->with('error', 'Silakan login terlebih dahulu.');
     }
@@ -35,8 +46,15 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->name('admin.dashboard');
 
+HEAD;
 // CRUD
 Route::resource('kategori', KategoriController::class);
 Route::resource('mahasiswa', MahasiswaController::class);
 Route::resource('pengaduan', PengaduanController::class);
+
+Route::resource('kategori', KategoriController::class);
+Route::resource('mahasiswa', MahasiswaController::class);
+Route::resource('pengaduan', PengaduanController::class)->except(['show']);
+Route::resource('tanggapan', TanggapanController::class)->except(['show']);
+9d3f9160fbd1e1cda3697cb806586094255ef1cc;
 Route::resource('user', UserController::class);
